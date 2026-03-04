@@ -7,24 +7,23 @@
     scroll-margin-top: 4rem;
 }
 
-.intro-section,
-.projects-section,
-.experience-section,
-.education-section {
-    margin-bottom: 4rem;
-    
-    h2 {
-        color: $primary-color;
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 3px solid $accent-color;
-    }
-    
-    p {
-        margin-bottom: 1rem;
-        line-height: 1.8;
-        font-size: 1.05rem;
+.homepage-detail {
+    section {
+        margin-bottom: 4rem;
+        
+        h2 {
+            color: $primary-color;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid $accent-color;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
     }
 }
 

@@ -197,14 +197,16 @@
 
     .layout-wrapper .sidebar {
         width: 100%;
-        position: static;
+        position: sticky;
+        top: 0;
+        z-index: 50;
         height: auto;
         overflow: visible;
         padding: 1rem;
 
         .avatar img {
-            height: 100px;
-            width: 100px;
+            height: 75px;
+            width: 75px;
             border: .33rem solid $accent-color;
             object-position: top -1rem left 0;
         }
@@ -212,6 +214,11 @@
         .profile-name {
             font-size: 1.5rem;
         }
+    }
+
+    // When expanded, switch to relative so content pushes down naturally
+    .layout-wrapper .sidebar:has(.sidebar-content.sidebar-expanded) {
+        position: relative;
     }
 
     .sidebar-content {
@@ -227,14 +234,20 @@
 
         .sidebar-btn {
             display: block;
+            transition: max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
+
         }
 
         .sidebar-section {
             max-height: 0;
             overflow: hidden;
             opacity: 0;
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease;
+            transition: max-height 0.2s ease-in-out, opacity 0.2s ease;
             margin: 0;
+        }
+
+        .sidebar-quote {
+            transition: max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease, padding 0.2s ease;
         }
 
         &.sidebar-expanded {
@@ -246,13 +259,35 @@
             }
 
             .sidebar-quote {
-                margin-bottom: 0;
+                max-height: 500px;
+                opacity: 1;
+                margin-bottom: 2rem;
+                overflow: visible;
+            }
+        }
+
+        &.sidebar-scrolled {
+            .sidebar-header { margin-bottom: 0; }
+            
+            .sidebar-quote,
+            .sidebar-btn {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+                pointer-events: none;
             }
         }
 
         .sidebar-btn i {
             transition: transform 0.5s ease;
         }
+    }
+
+    .layout-wrapper .sidebar:has(.sidebar-content.sidebar-scrolled) {
+        padding: 0.5rem 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
 }
