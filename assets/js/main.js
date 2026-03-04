@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const icon = this.querySelector('i');
             icon.classList.toggle('fa-bars');
             icon.classList.toggle('fa-times');
-
         });
     }
 
@@ -40,20 +39,53 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCarouselButtons();
     }
 
-    // sidebar collapse toggle (tablet/mobile)
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.sidebar-btn');
-        if (!btn) return;
+    // Sticky sidebar collapse on mobile/tablet
+    const sidebarContent = document.querySelector('.sidebar-content');
+    if (sidebarContent) {
+        let scrollListenerPaused = false;
 
-        const sidebarContent = document.querySelector('.sidebar-content');
-        if (!sidebarContent) return;
+        const handleScroll = () => {
+            if (scrollListenerPaused) return;
+            if (window.innerWidth <= 1024) {
+                if (!sidebarContent.classList.contains('sidebar-expanded')) {
+                    sidebarContent.classList.toggle('sidebar-scrolled', window.scrollY > 10);
+                }
+            } else {
+                sidebarContent.classList.remove('sidebar-scrolled');
+            }
+        };
 
-        sidebarContent.classList.toggle('sidebar-expanded');
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll, { passive: true });
 
-        const icon = btn.querySelector('i');
-        if (icon) {
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
-        }
-    });
+        // sidebar collapse toggle (tablet/mobile)
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.sidebar-btn');
+            if (!btn) return;
+
+            const isExpanding = !sidebarContent.classList.contains('sidebar-expanded');
+            sidebarContent.classList.toggle('sidebar-expanded');
+
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            }
+
+            if (isExpanding) {
+                // Expanding: remove scrolled state so quote and btn are visible
+                sidebarContent.classList.remove('sidebar-scrolled');
+            } else {
+                // Collapsing: pause scroll listener so it doesn't fire mid-animation
+                scrollListenerPaused = true;
+                sidebarContent.classList.remove('sidebar-scrolled');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Resume after collapse animation + scroll completes
+                setTimeout(() => {
+                    scrollListenerPaused = false;
+                }, 500); // matches 0.3s transition + buffer
+            }
+        });
+    }
 });
